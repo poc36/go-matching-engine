@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package exchange;
+
+option go_package = "github.com/poc36/go-matching-engine/api/proto";
+
+// Side represents the side of the order
+enum Side {
+  SIDE_UNSPECIFIED = 0;
+  SIDE_BUY = 1;
+  SIDE_SELL = 2;
+}
+
+// OrderType represents the type of the order
+enum OrderType {
+  ORDER_TYPE_UNSPECIFIED = 0;
+  ORDER_TYPE_LIMIT = 1;
+  ORDER_TYPE_MARKET = 2;
+}
+
+// PlaceOrderRequest is sent by a client to place a new order on the exchange.
+// Note: Price and Size are uint64 to represent fixed-point arithmetic (e.g., * 10^8)
+message PlaceOrderRequest {
+  string user_id = 1;
+  string symbol = 2; // e.g. "BTC_USD"
+  Side side = 3;
+  OrderType type = 4;
+  uint64 price = 5;
+  uint64 size = 6;
+}
+
+// OrderResponse contains the status of the order placement.
+message OrderResponse {
+  string order_id = 1;
+  string status = 2;
+  string message = 3;
+}
+
+// CancelOrderRequest is sent to cancel an active limit order.
+message CancelOrderRequest {
+  string order_id = 1;
+  string symbol = 2;
+}
+
+// CancelResponse contains the status of the cancellation.
+message CancelResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ExchangeMarket is the core service defining the trading operations.
+service ExchangeMarket {
+  // Place a new order
+  rpc PlaceOrder (PlaceOrderRequest) returns (OrderResponse);
+  
+  // Cancel an existing order
+  rpc CancelOrder (CancelOrderRequest) returns (CancelResponse);
+}

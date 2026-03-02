@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go P2P Exchange | Powered by gRPC & Redis</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- CRT Effects -->
+    <div class="crt-overlay"></div>
+
+    <div class="terminal-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <h1>Go P2P Matching Engine</h1>
+            </div>
+            <div class="status-group">
+                <div class="binance-price">
+                    <span class="label">BTC</span>
+                    <span id="liveBtcPrice" class="value animate-pulse">---</span>
+                </div>
+                <div class="binance-price">
+                    <span class="label">ETH</span>
+                    <span id="liveEthPrice" class="value animate-pulse">---</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="pulse-ring"></div>
+                    <span>Engine Active (3k+ TPS)</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Column: Portfolio & Order Form -->
+            <div class="column left-col">
+                <!-- Portfolio Widget -->
+                <div class="panel portfolio-panel">
+                    <div class="panel-header">
+                        <h2>My Portfolio</h2>
+                        <span class="symbol">web-trader</span>
+                    </div>
+                    <div class="portfolio-balances">
+                        <div class="balance-item">
+                            <span class="asset">USD</span>
+                            <span class="amount" id="portUsd">---</span>
+                        </div>
+                        <div class="balance-item">
+                            <span class="asset">BTC</span>
+                            <span class="amount" id="portBtc">---</span>
+                        </div>
+                        <div class="balance-total">
+                            <span class="asset">≈ Total USD Value</span>
+                            <span class="amount total" id="portTotal">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Form Widget -->
+                <div class="panel order-panel">
+                    <div class="panel-header">
+                        <h2>Place Order</h2>
+                        <span class="symbol">BTC/USD</span>
+                    </div>
+                    <div class="order-form">
+                        <div class="type-selector">
+                            <button id="btnLimit" class="type-btn active">Limit</button>
+                            <button id="btnMarket" class="type-btn">Market</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Price</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="orderPrice" placeholder="0.00" value="65000" step="10">
+                                <span class="currency">USD</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Size</label>
+                            <div class="input-wrapper">
+                                <input type="number" id="orderSize" placeholder="0.0000" value="1" step="0.0001">
+                                <span class="currency">BTC</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group total-group">
+                            <label>Total</label>
+                            <div class="total-value" id="orderTotal">0.00 USD</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-buy" onclick="placeOrder('buy')">Buy BTC</button>
+                            <button class="btn btn-sell" onclick="placeOrder('sell')">Sell BTC</button>
+                        </div>
+                    </div>
+                    <div class="toast-container" id="toastContainer"></div>
+                </div>
+            </div>
+
+            <!-- Middle Column: Live Order Book -->
+            <div class="panel book-panel">
+                <div class="panel-header">
+                    <h2>Order Book (Market Depth)</h2>
+                </div>
+                <div class="order-book">
+                    <div class="book-headers">
+                        <span>Price (USD)</span>
+                        <span>Size (BTC)</span>
+                        <span>Total (USD)</span>
+                    </div>
+
+                    <div class="book-side asks" id="asksContainer">
+                        <div class="loading">Loading depth...</div>
+                    </div>
+
+                    <div class="spread-indicator">
+                        <span class="current-price" id="midPrice">---</span>
+                        <span class="spread-value" id="spreadValue">Spread: ---</span>
+                    </div>
+
+                    <div class="book-side bids" id="bidsContainer">
+                        <div class="loading">Loading depth...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Trade History -->
+            <div class="panel history-panel">
+                <div class="panel-header">
+                    <h2>Recent Trades</h2>
+                </div>
+                <div class="trade-history">
+                    <div class="history-headers">
+                        <span>Price</span>
+                        <span>Size</span>
+                        <span>Time</span>
+                    </div>
+                    <div class="history-list" id="tradesContainer">
+                        <div class="loading">Waiting for trades...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Open Orders Panel (New) -->
+            <div class="panel open-orders-panel" style="grid-column: 1 / -1;">
+                <div class="panel-header">
+                    <h2>My Open Orders</h2>
+                </div>
+                <div class="open-orders">
+                    <div class="history-headers">
+                        <span>Side</span>
+                        <span>Type</span>
+                        <span>Price</span>
+                        <span>Remaining / Size</span>
+                        <span>Action</span>
+                    </div>
+                    <div class="history-list" id="openOrdersContainer">
+                        <div class="loading">No open orders</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

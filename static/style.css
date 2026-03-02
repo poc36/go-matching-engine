@@ -1,0 +1,879 @@
+:root {
+    --bg-dark: #050505;
+    --bg-panel: rgba(12, 12, 20, 0.85);
+    --bg-hover: rgba(30, 30, 45, 0.9);
+    --border-color: #1a1a2e;
+    --border-glow: rgba(0, 243, 255, 0.2);
+    --text-primary: #f0f0f0;
+    --text-secondary: #8b8b99;
+
+    /* Intense Cyberpunk Neons */
+    --neon-green: #39ff14;
+    --neon-green-glow: rgba(57, 255, 20, 0.4);
+    --neon-green-bg: rgba(57, 255, 20, 0.1);
+
+    --neon-red: #ff003c;
+    --neon-red-glow: rgba(255, 0, 60, 0.4);
+    --neon-red-bg: rgba(255, 0, 60, 0.1);
+
+    --neon-blue: #00f3ff;
+    --neon-blue-glow: rgba(0, 243, 255, 0.5);
+
+    --neon-purple: #b800ff;
+    --neon-purple-glow: rgba(184, 0, 255, 0.4);
+
+    --gold: #f3ba2f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    /* Cyberpunk Grid Background */
+    background-image:
+        linear-gradient(rgba(5, 5, 5, 0.85), rgba(5, 5, 5, 0.85)),
+        linear-gradient(0deg, transparent 24%, rgba(0, 243, 255, 0.05) 25%, rgba(0, 243, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 243, 255, 0.05) 75%, rgba(0, 243, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(184, 0, 255, 0.05) 25%, rgba(184, 0, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(184, 0, 255, 0.05) 75%, rgba(184, 0, 255, 0.05) 76%, transparent 77%, transparent);
+    background-size: 100% 100%, 50px 50px, 50px 50px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+}
+
+/* --- CRT Monitor Effects --- */
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    background: linear-gradient(transparent 50%,
+            rgba(0, 0, 0, 0.15) 50%);
+    background-size: 100% 4px;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+.crt-overlay::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+}
+
+.crt-overlay::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 243, 255, 0.02);
+    z-index: 2;
+    animation: flicker 0.15s infinite;
+}
+
+.terminal-container {
+    width: 100%;
+    max-width: 1400px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 20px var(--neon-blue-glow), inset 0 0 10px rgba(0, 243, 255, 0.1);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+    animation: scan 3s infinite linear;
+}
+
+@keyframes scan {
+    100% {
+        left: 200%;
+    }
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: var(--neon-blue);
+    text-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue);
+    animation: flicker 2s infinite alternate;
+}
+
+@keyframes flicker {
+
+    0%,
+    19%,
+    21%,
+    23%,
+    25%,
+    54%,
+    56%,
+    100% {
+        opacity: 1;
+    }
+
+    20%,
+    24%,
+    55% {
+        opacity: 0.5;
+    }
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+h1:hover {
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+    color: var(--neon-blue);
+    text-shadow: -2px 0 var(--neon-red), 2px 0 var(--neon-green);
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0)
+    }
+
+    20% {
+        transform: translate(-2px, 2px)
+    }
+
+    40% {
+        transform: translate(-2px, -2px)
+    }
+
+    60% {
+        transform: translate(2px, 2px)
+    }
+
+    80% {
+        transform: translate(2px, -2px)
+    }
+
+    100% {
+        transform: translate(0)
+    }
+}
+
+.status-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.binance-price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(243, 186, 47, 0.1);
+    padding: 6px 16px;
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 12px rgba(243, 186, 47, 0.3);
+    border-radius: 2px;
+}
+
+.binance-price .label {
+    color: var(--gold);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.binance-price .value {
+    font-weight: 700;
+    color: var(--text-primary);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--neon-green);
+    text-transform: uppercase;
+    text-shadow: 0 0 5px var(--neon-green);
+}
+
+.pulse-ring {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px var(--neon-green);
+        opacity: 0.7;
+    }
+
+    100% {
+        box-shadow: 0 0 15px var(--neon-green), 0 0 30px var(--neon-green);
+        opacity: 1;
+    }
+}
+
+/* Main Layout */
+.main-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr 340px;
+    gap: 20px;
+    align-items: start;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 243, 255, 0.02);
+}
+
+/* Cyberpunk Corner Accents */
+.panel::before,
+.panel::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--neon-blue);
+    opacity: 0.8;
+    box-shadow: 0 0 10px var(--neon-blue-glow);
+}
+
+.panel::before {
+    top: -1px;
+    left: -1px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.panel::after {
+    bottom: -1px;
+    right: -1px;
+    border-left: none;
+    border-top: none;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--neon-purple-glow);
+    padding-bottom: 10px;
+}
+
+.panel-header h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px var(--neon-blue-glow);
+}
+
+.symbol {
+    font-size: 12px;
+    color: var(--neon-blue);
+    background: rgba(0, 243, 255, 0.15);
+    padding: 4px 8px;
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 5px var(--neon-blue-glow);
+}
+
+/* Portfolio */
+.portfolio-balances {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.balance-item,
+.balance-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #1f1f33;
+    transition: all 0.3s ease;
+}
+
+.balance-item:hover {
+    border-color: var(--neon-purple);
+    box-shadow: inset 0 0 10px var(--neon-purple-glow);
+}
+
+.balance-item .asset {
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.balance-item .amount {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.balance-total {
+    background: rgba(0, 243, 255, 0.05);
+    border-color: var(--neon-blue);
+    box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.15);
+}
+
+.balance-total .asset {
+    color: var(--neon-blue);
+    font-weight: 700;
+    font-size: 12px;
+    text-shadow: 0 0 5px var(--neon-blue-glow);
+}
+
+.balance-total .total {
+    font-weight: 700;
+    color: #fff;
+    font-size: 16px;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px var(--neon-blue);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    color: var(--neon-blue);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px var(--neon-blue-glow);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+input[type="number"] {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--border-color);
+    color: var(--neon-purple);
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono';
+    font-size: 16px;
+    font-weight: 700;
+    outline: none;
+    transition: all 0.3s;
+    text-shadow: 0 0 5px var(--neon-purple-glow);
+}
+
+input[type="number"]:focus {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 10px var(--neon-purple-glow), inset 0 0 15px var(--neon-purple-glow);
+}
+
+input[type="number"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: var(--text-secondary);
+    text-shadow: none;
+}
+
+.currency {
+    position: absolute;
+    right: 14px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.total-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.total-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 0;
+    border: 1px solid;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'JetBrains Mono';
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-buy {
+    background: rgba(57, 255, 20, 0.05);
+    color: var(--neon-green);
+    border-color: var(--neon-green);
+    box-shadow: inset 0 0 10px var(--neon-green-glow);
+}
+
+.btn-buy:hover {
+    background: var(--neon-green);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-green), Math.0 0 40px var(--neon-green);
+    text-shadow: none;
+}
+
+.btn-sell {
+    background: rgba(255, 0, 60, 0.05);
+    color: var(--neon-red);
+    border-color: var(--neon-red);
+    box-shadow: inset 0 0 10px var(--neon-red-glow);
+}
+
+.btn-sell:hover {
+    background: var(--neon-red);
+    color: #000;
+    box-shadow: 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
+    text-shadow: none;
+}
+
+.type-selector {
+    display: flex;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.type-btn {
+    flex: 1;
+    padding: 10px 0;
+    background: #000;
+    border: none;
+    border-right: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'JetBrains Mono';
+    letter-spacing: 1px;
+}
+
+.type-btn:last-child {
+    border-right: none;
+}
+
+.type-btn:hover {
+    background: rgba(0, 243, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.type-btn.active {
+    background: rgba(0, 243, 255, 0.15);
+    color: var(--neon-blue);
+    box-shadow: inset 0 -3px 0 var(--neon-blue), 0 0 10px var(--neon-blue-glow);
+    text-shadow: 0 0 5px var(--neon-blue);
+}
+
+/* Order Book */
+.book-headers {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr 1fr;
+    gap: 15px;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--neon-purple);
+    padding: 0 8px 12px 8px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px var(--neon-purple-glow);
+}
+
+.book-headers span:nth-child(2),
+.book-headers span:nth-child(3) {
+    text-align: right;
+}
+
+.book-row {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr 1fr;
+    gap: 15px;
+    font-size: 12px;
+    padding: 6px 8px;
+    margin: 2px 0;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.book-row:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.book-row span:nth-child(2),
+.book-row span:nth-child(3) {
+    text-align: right;
+}
+
+.book-row.ask .price {
+    color: var(--neon-red);
+    text-shadow: 0 0 8px rgba(255, 0, 60, 0.8);
+}
+
+.book-row.bid .price {
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
+}
+
+.depth-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.2;
+    transition: width 0.3s ease;
+}
+
+/* Highlight user's order rows */
+.book-row.my-order {
+    background: rgba(255, 255, 255, 0.15);
+    border-left: 2px solid var(--neon-blue);
+    position: relative;
+    box-shadow: inset 20px 0 20px -20px var(--neon-blue-glow);
+}
+
+.book-row.my-order::after {
+    content: '▶';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--neon-blue);
+    font-size: 10px;
+}
+
+.book-row.ask .depth-bar {
+    background: linear-gradient(90deg, transparent, var(--neon-red));
+}
+
+.book-row.bid .depth-bar {
+    background: linear-gradient(90deg, transparent, var(--neon-green));
+}
+
+.book-row span {
+    position: relative;
+    z-index: 1;
+}
+
+.spread-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 12px;
+    margin: 12px 0;
+    border: 1px solid var(--neon-purple-glow);
+    background: rgba(184, 0, 255, 0.05);
+    box-shadow: inset 0 0 20px rgba(184, 0, 255, 0.1);
+}
+
+.current-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px var(--neon-blue);
+}
+
+.spread-value {
+    font-size: 12px;
+    color: var(--neon-purple);
+    text-transform: uppercase;
+    text-shadow: 0 0 5px var(--neon-purple-glow);
+}
+
+/* Trade History */
+.history-headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--neon-purple);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px var(--neon-purple-glow);
+}
+
+.history-headers span:nth-child(2),
+.history-headers span:nth-child(3) {
+    text-align: right;
+}
+
+.trade-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 12px;
+    padding: 8px 8px;
+    margin: 4px 0;
+    border-left: 2px solid transparent;
+    background: rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+}
+
+.trade-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(2px);
+}
+
+.trade-row span:nth-child(2),
+.trade-row span:nth-child(3) {
+    text-align: right;
+}
+
+.trade-row.buy {
+    border-left-color: var(--neon-green);
+}
+
+.trade-row.buy .price {
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+}
+
+.trade-row.sell {
+    border-left-color: var(--neon-red);
+}
+
+.trade-row.sell .price {
+    color: var(--neon-red);
+    text-shadow: 0 0 8px rgba(255, 0, 60, 0.6);
+}
+
+.trade-row .time {
+    color: var(--text-secondary);
+    font-size: 11px;
+}
+
+/* Open Orders Table additions */
+.open-orders .history-headers,
+.open-orders-row {
+    grid-template-columns: 1fr 1fr 1fr 1.5fr 1fr;
+}
+
+.open-orders-row {
+    display: grid;
+    font-size: 12px;
+    padding: 8px 8px;
+    margin: 4px 0;
+    border-left: 2px solid transparent;
+    background: rgba(0, 0, 0, 0.4);
+    transition: all 0.2s;
+    align-items: center;
+}
+
+.open-orders-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.open-orders-row span {
+    text-transform: uppercase;
+}
+
+.open-orders-row .side-buy {
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green-glow);
+}
+
+.open-orders-row .side-sell {
+    color: var(--neon-red);
+    text-shadow: 0 0 5px var(--neon-red-glow);
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    padding: 4px 8px;
+    font-size: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono';
+    transition: 0.2s;
+}
+
+.cancel-btn:hover {
+    background: var(--neon-red);
+    color: #000;
+    box-shadow: 0 0 10px var(--neon-red-glow);
+}
+
+/* Toasts */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.toast {
+    padding: 16px 20px;
+    border: 1px solid;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    gap: 20px;
+}
+
+.toast.success {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.2), inset 0 0 10px rgba(57, 255, 20, 0.1);
+}
+
+.toast.error {
+    border-color: var(--neon-red);
+    color: var(--neon-red);
+    box-shadow: 0 0 20px rgba(255, 0, 60, 0.2), inset 0 0 10px rgba(255, 0, 60, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%) skewX(-10deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) skewX(0);
+    }
+}
+
+.loading {
+    text-align: center;
+    padding: 30px;
+    color: var(--neon-blue);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: blink 1.5s infinite;
+    text-shadow: 0 0 10px var(--neon-blue-glow);
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+    }
+}
