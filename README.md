@@ -15,6 +15,8 @@ A high-performance, real-time trading engine built with **Go**, **gRPC**, and **
 ### 🚀 Overview
 This project is a decentralized-ready P2P Matching Engine designed for high throughput and low latency. It handles Limit and Market orders, tracks real-time global prices, and provides a fully immersive trading experience directly in your browser.
 
+![Terminal Preview](assets/preview.png)
+
 ### ✨ Key Features
 - **High-Performance Core**: Internal matching engine using efficient data structures for Limit and Market orders.
 - **Real-Time Data**: Integrated `PriceFetcher` that pulls live BTC/ETH prices directly from Binance.
@@ -57,6 +59,8 @@ This project is a decentralized-ready P2P Matching Engine designed for high thro
 
 ### 🚀 Обзор
 Этот проект представляет собой децентрализованный P2P движок сопоставления ордеров (Matching Engine), разработанный для высокой пропускной способности и низкой задержки. Он обрабатывает лимитные и рыночные ордера, отслеживает мировые цены в реальном времени и обеспечивает полное погружение в торговлю прямо в вашем браузере.
+
+![Терминал](assets/preview.png)
 
 ### ✨ Ключевые особенности
 - **Высокопроизводительное ядро**: Внутренний механизм сопоставления, использующий эффективные структуры данных.
