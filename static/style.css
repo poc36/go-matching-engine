@@ -450,6 +450,34 @@ input[type="number"]:disabled {
     pointer-events: none;
 }
 
+/* Quick Fill Percentage Buttons */
+.quick-amounts {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.quick-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 10px;
+    padding: 6px 0;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono';
+    transition: all 0.2s;
+    border-radius: 2px;
+}
+
+.quick-btn:hover {
+    border-color: var(--neon-blue);
+    color: var(--neon-blue);
+    background: rgba(0, 243, 255, 0.05);
+    box-shadow: 0 0 5px var(--neon-blue-glow);
+}
+
 .total-group {
     display: flex;
     justify-content: space-between;
@@ -609,12 +637,14 @@ input[type="number"]:disabled {
 
 .book-row.ask .price {
     color: var(--neon-red);
-    text-shadow: 0 0 8px rgba(255, 0, 60, 0.8);
+    text-shadow: 0 0 4px rgba(255, 0, 60, 0.5);
+    /* Reduced from 8px and 0.8 opacity */
 }
 
 .book-row.bid .price {
     color: var(--neon-green);
-    text-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
+    text-shadow: 0 0 4px rgba(57, 255, 20, 0.5);
+    /* Reduced from 8px and 0.8 opacity */
 }
 
 .depth-bar {
@@ -785,8 +815,10 @@ input[type="number"]:disabled {
     background: transparent;
     border: 1px solid var(--neon-red);
     color: var(--neon-red);
-    padding: 4px 8px;
-    font-size: 10px;
+    padding: 8px 12px;
+    /* Increased padding for better clickability */
+    font-size: 12px;
+    /* Increased font size */
     cursor: pointer;
     text-transform: uppercase;
     font-family: 'JetBrains Mono';

@@ -25,6 +25,8 @@ const elements = {
 };
 
 let currentLivePrice = 0.0;
+let rawPortUsd = 0.0;
+let rawPortBtc = 0.0;
 
 
 // Calculate Local Total for Order Form
@@ -62,7 +64,7 @@ btnMarket.addEventListener('click', () => {
 });
 
 // Click on OrderBook rows to fill form (Only if Limit)
-function setOrderDetails(price, volume) {
+function setOrderDetails(price, volume, side) {
     if (currentOrderType === 'limit') {
         elements.formPrice.value = price;
         elements.formSize.value = volume;
@@ -70,6 +72,52 @@ function setOrderDetails(price, volume) {
     } else {
         // Even in market mode, clicking depth can set the size
         elements.formSize.value = volume;
+    }
+
+    // Contextual Click Behavior
+    const btnBuy = document.querySelector('.btn-buy');
+    const btnSell = document.querySelector('.btn-sell');
+
+    // Reset highlights
+    btnBuy.style.boxShadow = '';
+    btnSell.style.boxShadow = '';
+
+    if (side === 'ask') {
+        // Clicking an Ask means they want to Buy
+        btnBuy.style.boxShadow = '0 0 20px var(--neon-green), 0 0 40px var(--neon-green)';
+        setTimeout(() => btnBuy.style.boxShadow = '', 2000);
+    } else if (side === 'bid') {
+        // Clicking a Bid means they want to Sell
+        btnSell.style.boxShadow = '0 0 20px var(--neon-red), 0 0 40px var(--neon-red)';
+        setTimeout(() => btnSell.style.boxShadow = '', 2000);
+    }
+}
+
+// Quick Fill Percentages
+function fillSize(percentage) {
+    let targetSize = 0;
+
+    // In a real app we'd know if they intend to buy or sell. 
+    // Here we'll guess based on if they have mostly USD or BTC, or let the user fix it.
+    // For simplicity: If price is set, calc based on USD (buying power) OR BTC (selling power).
+    // Let's assume Buy power by default (USD / Price) if limit price exists.
+
+    const limitPrice = parseFloat(elements.formPrice.value);
+
+    if (limitPrice > 0 && rawPortUsd > 0) {
+        // Calculate how much BTC they can buy with X% of their USD at limit price
+        targetSize = (rawPortUsd * percentage) / limitPrice;
+    } else if (rawPortBtc > 0) {
+        // Calculate how much BTC they can sell based on X% of their BTC
+        targetSize = rawPortBtc * percentage;
+    }
+
+    if (targetSize > 0) {
+        // Format to 4 decimal places matching the step
+        elements.formSize.value = targetSize.toFixed(4);
+        updateTotal();
+    } else {
+        showToast("Cannot calculate size (balance or price is 0)", "error");
     }
 }
 
@@ -162,7 +210,7 @@ async function fetchDepth() {
                 const displayTotal = (lvl.price * lvl.volume).toFixed(2);
 
                 asksHTML += `
-                    <div class="book-row ask ${highlightClass}" onclick="setOrderDetails(${lvl.price}, ${lvl.volume})">
+                    <div class="book-row ask ${highlightClass}" onclick="setOrderDetails(${lvl.price}, ${lvl.volume}, 'ask')">
                         <div class="depth-bar" style="width: ${Math.min(depthWidth, 100)}%"></div>
                         <span class="price">${displayPrice}</span>
                         <span>${displayVolume}</span>
@@ -185,7 +233,7 @@ async function fetchDepth() {
                 const displayTotal = (lvl.price * lvl.volume).toFixed(2);
 
                 bidsHTML += `
-                    <div class="book-row bid ${highlightClass}" onclick="setOrderDetails(${lvl.price}, ${lvl.volume})">
+                    <div class="book-row bid ${highlightClass}" onclick="setOrderDetails(${lvl.price}, ${lvl.volume}, 'bid')">
                         <div class="depth-bar" style="width: ${Math.min(depthWidth, 100)}%"></div>
                         <span class="price">${displayPrice}</span>
                         <span>${displayVolume}</span>
@@ -289,6 +337,9 @@ async function fetchPortfolio() {
         const response = await fetch(`${API_URL}/portfolio`);
         if (!response.ok) return;
         const data = await response.json(); // { usd: 100000.0, btc: 0.0 }
+
+        rawPortUsd = data.usd;
+        rawPortBtc = data.btc;
 
         elements.portUsd.innerText = `$${data.usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         elements.portBtc.innerText = `₿${data.btc.toLocaleString(undefined, { minimumFractionDigits: 8, maximumFractionDigits: 8 })}`;
