@@ -17,7 +17,11 @@ const elements = {
     liveBtcPrice: document.getElementById('liveBtcPrice'),
     liveEthPrice: document.getElementById('liveEthPrice'),
     tradesContainer: document.getElementById('tradesContainer'),
-    openOrdersContainer: document.getElementById('openOrdersContainer')
+    openOrdersContainer: document.getElementById('openOrdersContainer'),
+
+    // AI Forecast Elements
+    aiDirection: document.getElementById('aiDirection'),
+    aiProb: document.getElementById('aiProb')
 };
 
 let currentLivePrice = 0.0;
@@ -364,3 +368,47 @@ function fetchAll() {
 // Start polling
 setInterval(fetchAll, 1000);
 fetchAll();
+
+// --- AI Forecast WebSocket Integration ---
+function connectAIWebSocket() {
+    const ws = new WebSocket('ws://localhost:8003/ws');
+
+    ws.onopen = () => {
+        console.log('Connected to ML Inference Service');
+        elements.aiDirection.innerText = 'WAITING...';
+        elements.aiDirection.className = 'pred-direction';
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+
+            elements.aiDirection.innerText = data.forecast;
+            elements.aiProb.innerText = `Confidence: ${(data.confidence || (Math.max(data.probability_up, 1 - data.probability_up) * 100)).toFixed(1)}%`;
+
+            if (data.forecast === 'UP') {
+                elements.aiDirection.className = 'pred-direction up';
+            } else {
+                elements.aiDirection.className = 'pred-direction down';
+            }
+        } catch (err) {
+            console.error('Error parsing AI message', err);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('ML WebSocket Disconnected. Reconnecting...');
+        elements.aiDirection.innerText = 'OFFLINE';
+        elements.aiDirection.className = 'pred-direction';
+        elements.aiProb.innerText = 'Confidence: ---%';
+        setTimeout(connectAIWebSocket, 2000);
+    };
+
+    ws.onerror = (err) => {
+        console.error('ML WebSocket error', err);
+        ws.close();
+    };
+}
+
+// Initialize ML WebSocket
+connectAIWebSocket();

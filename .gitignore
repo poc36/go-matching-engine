@@ -22,3 +22,14 @@
 engine.exe
 bin/
 protoc_bin/
+
+# Python ML
+python-ml/venv/
+python-ml/__pycache__/
+python-ml/catboost_info/
+python-ml/mlruns/
+python-ml/mlruns.db
+python-ml/dataset.csv
+python-ml/model.pkl
+python-ml/test_ws.py
+python-ml/.dvc/tmp/

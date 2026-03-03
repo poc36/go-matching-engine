@@ -132,19 +132,34 @@
                 </div>
             </div>
 
-            <!-- Right Column: Trade History -->
-            <div class="panel history-panel">
-                <div class="panel-header">
-                    <h2>Recent Trades</h2>
-                </div>
-                <div class="trade-history">
-                    <div class="history-headers">
-                        <span>Price</span>
-                        <span>Size</span>
-                        <span>Time</span>
+            <!-- Right Column: AI Forecast & Trade History -->
+            <div class="column right-col">
+                <div class="panel ai-panel">
+                    <div class="panel-header">
+                        <h2>AI Price Prediction</h2>
+                        <span class="symbol" style="color: var(--neon-purple); border-color: var(--neon-purple);">ML
+                            Model</span>
                     </div>
-                    <div class="history-list" id="tradesContainer">
-                        <div class="loading">Waiting for trades...</div>
+                    <div class="ai-prediction">
+                        <div class="pred-label">Price Direction</div>
+                        <div class="pred-direction" id="aiDirection">WAITING...</div>
+                        <div class="pred-prob" id="aiProb">Confidence: ---%</div>
+                    </div>
+                </div>
+
+                <div class="panel history-panel" style="flex: 1;">
+                    <div class="panel-header">
+                        <h2>Recent Trades</h2>
+                    </div>
+                    <div class="trade-history">
+                        <div class="history-headers">
+                            <span>Price</span>
+                            <span>Size</span>
+                            <span>Time</span>
+                        </div>
+                        <div class="history-list" id="tradesContainer">
+                            <div class="loading">Waiting for trades...</div>
+                        </div>
                     </div>
                 </div>
             </div>
