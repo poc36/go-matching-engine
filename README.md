@@ -62,6 +62,8 @@ A decentralized-ready P2P Matching Engine designed for high throughput and low l
 
 ### 🤖 ML Pipeline
 
+![AI Prediction Widget](assets/ai_widget.png)
+
 ```
 collector.py → dataset.csv → train.py → model.pkl → inference.py → WebSocket → UI
 ```
@@ -132,6 +134,8 @@ Average Latency:  ~275µs
    Перейдите по адресу `http://localhost:8080` в браузере.
 
 ### 🤖 ML Пайплайн
+
+![Виджет прогнозирования ИИ](assets/ai_widget.png)
 
 ```
 collector.py → dataset.csv → train.py → model.pkl → inference.py → WebSocket → UI
